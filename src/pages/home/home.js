@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import Input from '../../components/ui/input';
 import { bindAll } from 'lodash';
 import { connect } from 'react-redux';
-import { addTodo } from './actions';
+import { addTodo, likeTodo, deleteTodo } from './actions';
+import classnames from 'classnames';
 
 class HomePage extends Component {
     
@@ -37,9 +38,27 @@ class HomePage extends Component {
     }
 
     renderTodos(item, idx) {
+        const todoClasses = classnames('b-home-todo', {
+            'is-liked': item.liked
+        });
+        const btnClasses = classnames('btn', {
+            'active': item.liked
+        });
         return (
-            <li key={ idx }>{ item.name }</li>
+            <li key={ idx }>
+                <span className={ todoClasses }>{ item.name }</span>
+                <button className='btn' onClick={ this.deleteTodo.bind(this, item) }><i className='glyphicon glyphicon-remove' /></button>
+                <button className={ btnClasses } onClick={ this.likeTodo.bind(this, item) }><i className='glyphicon glyphicon-heart' /></button>
+            </li>
         );
+    }
+
+    likeTodo(todo) {
+        this.props.dispatch(likeTodo(todo));
+    }
+
+    deleteTodo(todo) {
+        this.props.dispatch(deleteTodo(todo));
     }
     
     render() {
@@ -57,7 +76,7 @@ class HomePage extends Component {
                            value={ todoName }
                            error={ error }
                        />
-                       <button className='btn btn-primary'
+                       <button className='btn btn-primary b-home-submit'
                                onClick={ this.addTodo }
                        >
                            Add todo
