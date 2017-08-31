@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { bindAll } from 'lodash';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import ListItem from './list-item';
 
-export default class ListPage extends Component {
+class ListPage extends Component {
 
     static path = '/list';
+    static propTypes = {
+        dispatch: PropTypes.func.isRequired,
+        list: PropTypes.object.isRequired
+    };
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            items: [
-                1, 2
-            ]
-        };
 
         bindAll(this, ['renderItems']);
     }
@@ -22,19 +22,40 @@ export default class ListPage extends Component {
         return (
             <ListItem
                 key={ idx }
-                id={ item }
+                id={ item.id }
+                name={ item.name }
             />
         );
     }
     
     render() {
+        const { items } = this.props.list;
         return (
-            <div>
-                <h3>List</h3>
-                <ul>
-                    { this.state.items.map(this.renderItems) }
-                </ul>
+            <div className='row'>
+                <div className='col-xs-12'>
+                    <h3>List</h3>
+                        <table className='table table-bordered table-hover'>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                { items.map(this.renderItems) }
+                            </tbody>
+                        </table>
+                </div>
             </div>
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        list: state.list
+    };
+}
+
+export default connect(mapStateToProps)(ListPage);
