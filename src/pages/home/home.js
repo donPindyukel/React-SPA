@@ -31,21 +31,20 @@ class HomePage extends Component {
         };
 
         bindAll(this, ['renderTodos', 'inputOnChange', 'addTodo']);
+        this.props.dispatch(getTodos());
     }
 
     componentWillMount() {
-        this.props.dispatch(getTodos());
+
     }
+
 
     inputOnChange(value) {
         this.setState({ todoName: value });
     }
 
     addTodo() {
-        const { todos } = this.props.home;
-        const id = todos[todos.length - 1].id + 1;
-        const name = this.state.todoName;
-        this.props.dispatch(addTodo(id, name));
+        this.props.dispatch(addTodo(this.props.home.todos, this.state.todoName));
         this.setState({ todoName: '' });
     }
 
@@ -75,16 +74,19 @@ class HomePage extends Component {
     
     render() {
         const { todoName } = this.state;
-        const { todos, error } = this.props.home;
+        const { isLoading, todos, error } = this.props.home;
         LocalStorageManager.set('todos', todos);
-
         return (
            <div className='row-fluid b-home'>
                <div className='col-xs-12'>
                    <ul>
                        {
-                           todos.length === 0 ? <Loader /> :
-                           todos.map(this.renderTodos)
+                           isLoading
+                               ? <Loader />
+                               : todos.length !== 0
+                                    ? todos.map(this.renderTodos)
+                                    : 'Элементов нет'
+
                        }
                    </ul>
                    <div className='col-xs-4'>
