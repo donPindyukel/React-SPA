@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { openModal } from '../../components/modal';
-import EditModal from './edit-modal';
-import { editItem } from './actions';
+import EditModal from './modals/edit-modal';
+import DeleteModal from './modals/delete-modal';
+import { editItem, deleteItem } from './actions';
 
 class ListItem extends Component {
 
@@ -19,15 +20,22 @@ class ListItem extends Component {
         super(props);
 
         this.edit = this.edit.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     edit() {
         const { id, name, youtube } = this.props;
         this.props.dispatch(openModal({
             content: <EditModal id={ id } name={ name } youtube={ youtube } onSave={ editItem }/>,
-            title: 'Редактировать',
-            btnText: 'Сохранить'
+            title: 'Редактировать'
+        }));
+    }
 
+    delete() {
+        const { id, name } = this.props;
+        this.props.dispatch(openModal({
+            content: <DeleteModal id={ id } name={ name } onSuccess={ deleteItem }/>,
+            title: 'Редактировать'
         }));
     }
     
@@ -40,7 +48,7 @@ class ListItem extends Component {
                     <button className='btn btn-success' onClick={ this.edit }>
                         <i className='glyphicon glyphicon-pencil' />
                     </button>
-                    <button className='btn btn-danger'>
+                    <button className='btn btn-danger' onClick={ this.delete }>
                         <i className='glyphicon glyphicon-remove' />
                     </button>
                 </td>
