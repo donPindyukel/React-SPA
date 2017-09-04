@@ -13,7 +13,6 @@ function modalReducer(state = initialState, action) {
             return Object.assign({}, state, {
                 isOpen: true,
                 title: action.title,
-                btnText: action.btnText,
                 content: action.content
             });
         case CLOSE_MODAL:
