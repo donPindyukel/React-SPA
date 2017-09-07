@@ -20,7 +20,7 @@ export default class App extends Component {
 
                 <Header />
                 { this.props.children }
-                { process.env.NODE_ENV !== 'production' ? <DevTools /> : null }
+                { NODE_ENV !== 'production' ? <DevTools /> : null }
             </div>
         );
     }
