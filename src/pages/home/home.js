@@ -83,7 +83,7 @@ class HomePage extends Component {
                        {
                            isLoading
                                ? <Loader />
-                               : todos.length
+                               : todos.length !== 0
                                     ? todos.map(this.renderTodos)
                                     : 'Элементов нет'
 

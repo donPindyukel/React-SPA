@@ -15,9 +15,7 @@ export default class App extends Component {
         return (
             <div className='container-fluid'>
                 <TopAlert />
-
                 <Modal />
-
                 <Header />
                 { this.props.children }
                 { NODE_ENV !== 'production' ? <DevTools /> : null }
